@@ -1,0 +1,60 @@
+
+<html>
+
+<head>
+</head>
+
+<body style="margin:0 ">
+
+<canvas id="canvas" width="800" height="400" style="border:1px solid"></canvas> <br>
+
+<input type="button" id="clear" value="ERASE!">
+
+<script>
+var canvas=document.getElementById('canvas');
+var ctx=canvas.getContext('2d');
+var radius=0;
+var nX = 0;
+var nY = 0;
+var IsDrawing = false;
+
+var putPoint = (e) => {
+  nX = e.clientX;
+  nY = e.clientY;
+  IsDrawing = true;
+  radius = 0;
+}
+var drawPoint = (e) => {
+  if(!IsDrawing)
+    return;
+  var DX = nX - e.clientX;
+  var DY = nY - e.clientY;
+  radius = Math.sqrt(DX * DX + DY * DY)
+  ctx.beginPath();
+  ctx.arc(nX, nY, radius, 0, Math.PI*2);
+  ctx.fillStyle = getRandomColor();
+  ctx.fill();
+}
+var stopPoint = (e) => {
+  IsDrawing = false;
+}
+
+getRandomColor = () => {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+document.getElementById('clear').addEventListener('click',function() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+});
+  
+canvas.addEventListener('mousedown',putPoint);
+canvas.addEventListener('mousemove',drawPoint);
+canvas.addEventListener('mouseup',stopPoint);
+</script>
+</body>
+</html>
